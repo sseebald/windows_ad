@@ -6,7 +6,7 @@ class windows_ad ($path,$filename){
 
   Dism {
     ensure => present,
-    before => Ad::Answers["${filename}"],
+    before => Windows_Ad::Answers["${filename}"],
   }
 
   dism { 'NetFx3':} ->
@@ -18,7 +18,7 @@ class windows_ad ($path,$filename){
     subscribe => Dism['DirectoryServices-AdministrativeCenter'],
   }
 
-  class { 'ad::user':
+  class { 'windows_ad::user':
     password => 'puppetlabs123!',
   }
 
@@ -26,12 +26,12 @@ class windows_ad ($path,$filename){
     name             => $filename,
     answerspath      => $path,
     newdomaindnsname => 'seteam.test.com',
-    require          => Class['ad::user'],
+    require          => Class['windows_ad::user'],
   }
 
   exec { 'install ad':
     command  => "%WINDIR%\Sysnative\dcpromo.exe /unattend:${path}${filename}",
-    require  => Ad::Answers["$filename"],
+    require  => Windows_Ad::Answers["$filename"],
     provider => powershell,
   }
 
