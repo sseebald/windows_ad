@@ -1,4 +1,4 @@
-class ad ($path,$filename){
+class windows_ad ($path,$filename){
 
   reboot { 'before':
     when => pending,

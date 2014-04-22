@@ -1,4 +1,4 @@
-define ad::answers
+define windows_ad::answers
 (
   $name,
   $answerspath,
