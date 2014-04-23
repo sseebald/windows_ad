@@ -21,5 +21,7 @@ environment becomes seteam.test.com\vagrant with the same password as before usi
 
 Outstanding TO-DO's:
  - Clean up code
+ - Need comments throughout
  - Move some things to hiera?
+ - Exec for installing via dcpromo is NOT idempotent yet
  - ?
