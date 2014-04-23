@@ -1,4 +1,8 @@
-class windows_ad ($path,$filename){
+class windows_ad (
+  $path,
+  $filename,
+  $admin_password = 'puppetlabs123!',
+) {
 
   reboot { 'before':
     when => pending,
@@ -19,7 +23,7 @@ class windows_ad ($path,$filename){
   }
 
   class { 'windows_ad::user':
-    password => 'puppetlabs123!',
+    password => $admin_password,
   }
 
   windows_ad::answers { "${filename}":
