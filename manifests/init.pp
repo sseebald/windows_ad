@@ -1,12 +1,18 @@
-class windows_ad ($path,$filename){
+class windows_ad (
+  $path,
+  $filename,
+  $admin_password = 'puppetlabs123!',
+  $newdomaindnsname = 'seteam.test.com',
+) {
 
-  reboot { 'before':
+  reboot { 'windows_ad_pre_pending':
     when => pending,
   }
 
   Dism {
-    ensure => present,
-    before => Windows_Ad::Answers["${filename}"],
+    ensure  => present,
+    before  => Windows_Ad::Answers["${filename}"],
+    require => Reboot['windows_ad_pre_pending'],
   }
 
   dism { 'NetFx3':} ->
@@ -14,24 +20,25 @@ class windows_ad ($path,$filename){
   dism { 'DirectoryServices-DomainController':} ->
   dism { 'DirectoryServices-DomainController-Tools':} ->
   dism { 'DirectoryServices-AdministrativeCenter':}
-  reboot { 'now':
+  reboot { 'windows_ad_post_AdministrativeCenter':
     subscribe => Dism['DirectoryServices-AdministrativeCenter'],
   }
 
   class { 'windows_ad::user':
-    password => 'puppetlabs123!',
+    password => $admin_password,
+    require  => Reboot['windows_ad_post_AdministrativeCenter'],
   }
 
-  windows_ad::answers { "${filename}":
+  windows_ad::answers { $filename:
     name             => $filename,
     answerspath      => $path,
-    newdomaindnsname => 'seteam.test.com',
+    newdomaindnsname => $newdomaindnsname,
     require          => Class['windows_ad::user'],
   }
 
   exec { 'install ad':
     command   => "cmd.exe /c %WINDIR%\Sysnative\dcpromo.exe /unattend:${path}${filename}",
-    require   => Windows_Ad::Answers["$filename"],
+    require   => Windows_Ad::Answers[$filename],
     path      => $::path,
     #provider => powershell,
   }
