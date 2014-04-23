@@ -22,7 +22,7 @@ class windows_ad ($path,$filename){
     password => 'puppetlabs123!',
   }
 
-  ad::answers { "${filename}":
+  windows_ad::answers { "${filename}":
     name             => $filename,
     answerspath      => $path,
     newdomaindnsname => 'seteam.test.com',
