@@ -5,7 +5,7 @@ class windows_ad (
   $newdomaindnsname = 'seteam.test.com',
 ) {
 
-  reboot { 'before':
+  reboot { 'windows_ad_pre_pending':
     when => pending,
   }
 
@@ -19,7 +19,7 @@ class windows_ad (
   dism { 'DirectoryServices-DomainController':} ->
   dism { 'DirectoryServices-DomainController-Tools':} ->
   dism { 'DirectoryServices-AdministrativeCenter':}
-  reboot { 'now':
+  reboot { 'windows_ad_post_AdministrativeCenter':
     subscribe => Dism['DirectoryServices-AdministrativeCenter'],
   }
 
