@@ -2,6 +2,7 @@ class windows_ad (
   $path,
   $filename,
   $admin_password = 'puppetlabs123!',
+  $newdomaindnsname = 'seteam.test.com',
 ) {
 
   reboot { 'before':
@@ -29,7 +30,7 @@ class windows_ad (
   windows_ad::answers { "${filename}":
     name             => $filename,
     answerspath      => $path,
-    newdomaindnsname => 'seteam.test.com',
+    newdomaindnsname => $newdomaindnsname,
     require          => Class['windows_ad::user'],
   }
 
