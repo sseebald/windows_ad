@@ -24,6 +24,6 @@ define windows_ad::answers
 
   file { "${answerspath}${name}":
     ensure  => file,
-    content => template('ad/answers.erb'),
+    content => template('windows_ad/answers.erb'),
   }
 }
