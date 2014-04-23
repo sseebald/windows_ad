@@ -30,9 +30,10 @@ class windows_ad ($path,$filename){
   }
 
   exec { 'install ad':
-    command  => "%WINDIR%\Sysnative\dcpromo.exe /unattend:${path}${filename}",
-    require  => Windows_Ad::Answers["$filename"],
-    provider => powershell,
+    command   => "cmd.exe /c %WINDIR%\Sysnative\dcpromo.exe /unattend:${path}${filename}",
+    require   => Windows_Ad::Answers["$filename"],
+    path      => $::path,
+    #provider => powershell,
   }
 
 }
