@@ -10,8 +10,9 @@ class windows_ad (
   }
 
   Dism {
-    ensure => present,
-    before => Windows_Ad::Answers["${filename}"],
+    ensure  => present,
+    before  => Windows_Ad::Answers["${filename}"],
+    require => Reboot['windows_ad_pre_pending'],
   }
 
   dism { 'NetFx3':} ->
@@ -25,6 +26,7 @@ class windows_ad (
 
   class { 'windows_ad::user':
     password => $admin_password,
+    require  => Reboot['windows_ad_post_AdministrativeCenter'],
   }
 
   windows_ad::answers { "${filename}":
