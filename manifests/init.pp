@@ -29,7 +29,7 @@ class windows_ad (
     require  => Reboot['windows_ad_post_AdministrativeCenter'],
   }
 
-  windows_ad::answers { "${filename}":
+  windows_ad::answers { $filename:
     name             => $filename,
     answerspath      => $path,
     newdomaindnsname => $newdomaindnsname,
@@ -38,7 +38,7 @@ class windows_ad (
 
   exec { 'install ad':
     command   => "cmd.exe /c %WINDIR%\Sysnative\dcpromo.exe /unattend:${path}${filename}",
-    require   => Windows_Ad::Answers["$filename"],
+    require   => Windows_Ad::Answers[$filename],
     path      => $::path,
     #provider => powershell,
   }
